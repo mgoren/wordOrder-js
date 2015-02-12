@@ -47,3 +47,26 @@ var orderify = function(words) {
 
   return orderedWords;
 };
+
+// ------------------------------------------------------------------
+
+$(document).ready(function() {
+  $("form#user-phrase").submit(function(event) {
+    $("#order-result").text("");
+    $("#result").hide();
+    $("#error").hide();
+
+    var phrase = $("input#phrase").val();
+    var words = orderify(phrase);
+
+    $("#order-result").append("<ul>");
+    words.forEach(function(word) {
+      $("#order-result").append("<li>" + word + "</li>");
+    });
+    $("#order-result").append("</ul>");
+
+    $("#result").show();
+    event.preventDefault();
+
+  });
+});
