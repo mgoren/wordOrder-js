@@ -65,7 +65,12 @@ $(document).ready(function() {
     });
     $("#order-result").append("</ul>");
 
-    $("#result").show();
+    if (phrase) {
+      $("#result").show();
+    } else {
+      $("#error").show();
+    }
+    
     event.preventDefault();
 
   });
