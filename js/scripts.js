@@ -1,45 +1,45 @@
 var orderify = function(words) {
   var orderedWords = [];
-  var wordsWithCount = [];
-  var previousWords = [];
   var splitWords = words.split(" ");
-  var indexOfWord = 0;
+  var wordsAry = [];
+  var countAry = [];
+  var objectAry = [];
+
+  // splitWords: ["apple", "candy", "abnut", "candy"]
 
   splitWords.forEach(function(word) {
-    if ( previousWords.indexOf(word) === -1 ) { // if new word
-      previousWords.push(word);
-      wordsWithCount.push([1, word]);
+    if ( wordsAry.indexOf(word) === -1 ) { // if new word
+      wordsAry.push(word);
+      countAry.push(1);
     } else { // if is another occurence of previous word
-      wordsWithCount.forEach(function(wordAndCount, index) {
-        if (wordAndCount[1] === word) {
-          indexOfWord = index;
-        }
-      });
-      wordsWithCount[indexOfWord][0]++;
+      countAry[wordsAry.indexOf(word)]++;
     }
   });
 
-  // each element in wordsWithCount IS an array [count, word]
+  // now we have 2 separate arrays, with matching indexes
+  // wordsAry: ["apple", "candy", "abnut"]
+  // countAry: [1, 2, 1]
 
-  // array now looks like this:
-  // [ [1, "apple"], [2, "candy"], [1, "abnut"] ]
+  // now create array of objects by looping thru one array and combining with other
+  // note: objectAry (populated below) will be an array of objects
+  // note: each object being created below matches one word with its corresponding count
+  wordsAry.forEach(function(word, index) {
+    objectAry.push({ "word": word, "count": countAry[index] })
+  })
 
-  wordsWithCount.sort(function(a, b) {
-    if (a[0] < b[0]) {
-      return 1;
-    }
-    if (a[0] > b[0]) {
-      return -1;
-    }
-    // a[0] === b[0]
-    return 0;
+  // array of objects now looks like this:
+  // [ {1, apple} {2, candy} {1, abnut} ]
+
+  objectAry.sort(function(a, b) {
+    return b["count"] - a["count"]; // return positive if b is bigger, negative if a is bigger, 0 if equal
   });
 
-  // array now looks like this:
-  // [ [2, "candy"], [1, "apple"], [1, "abnut"] ]
+  // array of objects now looks like this:
+  // [ {2, candy}, {1, apple}, {1, abnut} ]
 
-  wordsWithCount.forEach(function(wordAndCount) {
-    orderedWords.push(wordAndCount[1]);
+  // now make array of words so that we can return just that
+  objectAry.forEach(function(wordAndCountObj) {
+    orderedWords.push(wordAndCountObj["word"]);
   });
 
   // array now looks like this:
@@ -70,7 +70,7 @@ $(document).ready(function() {
     } else {
       $("#error").show();
     }
-    
+
     event.preventDefault();
 
   });
